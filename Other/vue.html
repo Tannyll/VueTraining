@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Training 1</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1>{{ title }}</h1>
+        <hr>
+        <input type="text" v-on:input="changeTitle">
+        <input type="text" v-model="description">
+
+        <!-- Modifier -->
+        <input type="text" v-on:keyup.enter.space="showAlert2">
+        <p>{{ description }}</p>
+        {{ hi() }}
+        <hr>
+        <p v-once>{{ name }}</p>
+        <p> {{ merhaba() }} <a v-bind:href="url">Link</a></p>
+        <p v-html="blogUrl"></p>
+        <p>{{randomValue()}}</p>
+        <hr>
+        <button v-on:click="showAlert(counter)">Göster</button>
+        <button v-on:click="increaseCounter">Artır</button>
+        <!-- Sadece 1 satır yani 1 tane expression yazabiliriz -->
+        <button v-on:click="counter--">- Azalt</button>
+        <button v-on:click="counter++">+ Artır</button>
+        <button v-on:click="counter+=4">+ 4 Artır</button>
+        <p v-on:mousemove="updateCoords(2, $event)"> Koordinat: {{x}}, {{y}}
+            <span v-on:mousemove.stop>
+                Gizli Bölüm
+            </span>
+        </p>
+        <p>Counter : {{ counter }}</p>
+        <p> Method Result : {{ result() }} </p>
+        <p> Computed Result : {{ output }}</p>
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el: "#app",
+            data: {
+                title: "OSMANLI Reklam",
+                description: "bu açıklama",
+                name: "Serdar",
+                lastName: "EMIRCI",
+                url: "http://www.emirci.com",
+                blogUrl: "<a href='http://www.blogger.com'>Blog</a>",
+                counter: 0,
+                x: 0,
+                y: 0,
+            },
+            methods: {
+                changeTitle: function (event) {
+                    this.title = event.target.value;
+                },
+                hi: function () {
+                    return "hello"
+                },
+                merhaba: function () {
+                    this.name = "Asya"
+                    return this.name + " " + this.lastName
+                },
+                randomValue: function () {
+
+                    return "Random Value : " + Math.floor(Math.random() * Math.floor(3));
+                },
+                showAlert: function (item) {
+                    alert(item)
+                },
+                showAlert2: function (event) {
+                    alert(event.target.value)
+                },
+                increaseCounter: function () {
+                    this.counter++;
+                },
+                result: function () {
+                    console.log("Method.")
+                    return this.counter > 10 ? "Counter 10'dan büyüktür" : "Counter 10'dan küçüktür.";
+                },
+                updateCoords: function (step, event) {
+                    this.counter += step;
+                    this.x = event.clientX;
+                    this.y = event.clientY;
+                }
+
+            },
+            computed: {
+               /*  Senkron Çalışır */
+                output: function () {
+                    console.log("Computed.")
+                    return this.counter > 10 ? "Counter 10'dan büyüktür" : "Counter 10'dan küçüktür.";
+                }
+            },
+            watch: {
+                /* Asenkron Çalışır */
+                counter: function(value){
+                    vm = this;
+                    setTimeout(function(){
+                        vm.counter = 0;
+                    },15000)
+                }    
+            }
+        });
+//https://www.udemy.com/course/sifirdan-ileri-seviye-vuejs-2-vuex-vue-router-egitim-seti/learn/lecture/11193552#overview
+    </script>
+</body>
+
+</html>
