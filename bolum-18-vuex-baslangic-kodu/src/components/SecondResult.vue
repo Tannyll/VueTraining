@@ -2,6 +2,10 @@
   <div>
     <p class="counter-container">Sayaç : {{ doubleC }}</p>
     <p class="counter-container">Tıklama : {{ stringC }}</p>
+    <br />
+    <input type="text" v-model="value" />
+
+    <p>{{ value }}</p>
   </div>
 </template>
 <script>
@@ -14,8 +18,20 @@ export default {
       doubleC: "getDoubleCounter",
       stringC: "getStringCounter",
     }),
+    value: {
+      get() {
+        return this.$store.getters.getValue;
+      },
+      set(value) {
+        this.$store.dispatch("setValueData", value);
+      },
+    },
   },
-  methods: {},
+  methods: {
+    // setValue(event) {
+    //   this.$store.dispatch("setValueData", event.target.value);
+    // },
+  },
 };
 </script>
 <style scoped>
