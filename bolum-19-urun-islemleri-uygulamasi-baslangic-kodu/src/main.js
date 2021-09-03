@@ -8,6 +8,17 @@ Vue.use(VueResource);
 Vue.filter("currency", (value) => {
     return parseFloat(value).toLocaleString(undefined, { minimumFractionDigits: 2 }) + " ₺"
 });
+
+Vue.filter("truncate", (value, size) => {
+    if (!value) return '';
+    value = value.toString();
+
+    if (value.length <= size) {
+        return value;
+    }
+    return value.substr(0, size) + '...';
+});
+
 new Vue({
     el: '#app',
     router,
