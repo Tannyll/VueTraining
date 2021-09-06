@@ -1,0 +1,14 @@
+{
+    "name": "vuejs-tagx-component",
+    "description": "Serdar tarafından VUE.JS ile hazırlanan Tag component",
+    "version": "1.0.0",
+    "main": "Tags.vue",
+    "author": "Serdar",
+    "license": "ISC",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "vuejs,serdar,component tag"
+    ]
+}
