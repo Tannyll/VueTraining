@@ -55,7 +55,7 @@
 </template>
 <script>
 import axios from "axios";
-
+// TODO : AXIOS https://github.com/axios/axios
 export default {
   data() {
     return {
@@ -73,7 +73,7 @@ export default {
     onSubmit() {
       axios
         .post(
-          "https://tannyll-default-rtdb.europe-west1.firebasedatabase.app/posts.json",
+          "/posts.json",
           {
             ...this.post,
             updatedDate: new Date(),

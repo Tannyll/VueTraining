@@ -17,14 +17,16 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
+import custom_Axios from "../custom_axios";
+// TODO : AXIOS https://github.com/axios/axios
 export default {
   data() {
     return { postList: [] };
   },
   created() {
-    axios
-      .get("https://tannyll-default-rtdb.europe-west1.firebasedatabase.app/posts.json")
+    custom_Axios
+      .get("/posts.json")
       .then((response) => {
         console.log(response);
         let data = response.data;
@@ -32,7 +34,6 @@ export default {
         for (let key in data) {
           this.postList.push({ ...data[key], id: key });
         }
-        
       })
       .catch((e) => {
         console.log(e);
