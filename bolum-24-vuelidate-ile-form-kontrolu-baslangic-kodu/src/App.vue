@@ -133,12 +133,12 @@
             </li>
           </ul>
 
-          <button class="btn btn-outline-secondary rounded-0">Kaydet</button>
+          <button :disabled="$v.$invalid" class="btn btn-outline-secondary rounded-0">Kaydet</button>
         </form>
       </div>
       <div class="card p-4 mt-3 shadow" style="width: 400px">
         <p>
-          {{ $v.selectedCategory }}
+          {{ $v.email }}
         </p>
       </div>
     </div>
@@ -180,8 +180,15 @@ export default {
       required,
       email,
       uniq: (arg) => {
-        return arg !== "serdar2emirci.com" ? true : false;
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(arg !== "serdar@emirci.com");
+          }, 2000);
+        });
       },
+      // uniq: (arg) => {
+      //   return arg !== "serdar@emirci.com";
+      // },
     },
     password: {
       required,
