@@ -24,12 +24,15 @@
 <script>
 export default {
   methods: {
-    logout() {},
+    logout() {
+      this.$store.dispatch("logout");
+      
+    },
   },
   computed: {
     logoutClass() {
       return {
-        "d-none": false,
+        "d-none": !this.$store.getters.isAuthenticated,
       };
     },
   },

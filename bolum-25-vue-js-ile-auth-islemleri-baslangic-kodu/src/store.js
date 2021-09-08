@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from "axios";
+import { router } from './router';
 
 Vue.use(Vuex);
 const firebaseConfig = {
@@ -39,6 +40,25 @@ const store = new Vuex.Store({
         }
     },
     actions: {
+        initAuth({ dispatch, commit }) {
+            let token = localStorage.getItem("token")
+            if (token) {
+                let expirationDate = localStorage.getItem("expirationDate");
+                let time = new Date().getTime()
+
+
+                if (time >= +expirationDate) {
+                    console.log("token süresi bitmiş")
+                    dispatch("logout");
+                } else {
+                    commit("setToken", token)
+                    router.push("/")
+                }
+            } else {
+                router.push("/auth")
+
+            }
+        },
         login({ commit, dispatch, state }, authData) {
             let authLink = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=";
             if (authData.isUser) {
@@ -53,13 +73,27 @@ const store = new Vuex.Store({
                 })
                 .then((response) => {
                     commit("setToken", response.data.idToken)
+                    localStorage.setItem("token", response.data.idToken);
+                    //localStorage.setItem("expirationDate", new Date().getTime() + response.data.expiresIn * 1000);
+                    localStorage.setItem("expirationDate", new Date().getTime() + 5000);
 
-                    console.log(response);
+                    //dispatch("setTimeoutTimer", +response.data.expiresIn * 1000)
+                    dispatch("setTimeoutTimer", 5000)
+
+                    console.log(response.data);
                 });
 
         },
         logout({ commit, dispatch, state }) {
-
+            commit("clearToken");
+            localStorage.removeItem("token");
+            localStorage.removeItem("expirationDate");
+            router.replace("/auth");
+        },
+        setTimeoutTimer({ dispatch }, expiresIn) {
+            setTimeout(() => {
+                dispatch("logout");
+            }, expiresIn)
         }
     }
 })
