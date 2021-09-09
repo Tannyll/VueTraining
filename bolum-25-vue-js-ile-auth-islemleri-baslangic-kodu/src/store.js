@@ -40,7 +40,7 @@ const store = new Vuex.Store({
         }
     },
     actions: {
-        initAuth({ dispatch, commit }) {
+        initAuth({ commit, dispatch }) {
             let token = localStorage.getItem("token")
             if (token) {
                 let expirationDate = localStorage.getItem("expirationDate");
@@ -52,11 +52,13 @@ const store = new Vuex.Store({
                     dispatch("logout");
                 } else {
                     commit("setToken", token)
+                    let timerSecond = +expirationDate - time
+                    dispatch("setTimeoutTimer", timerSecond)
+                    console.log("Kalan Saniye : " + timerSecond)
                     router.push("/")
                 }
             } else {
-                router.push("/auth")
-
+                router.replace("/")
             }
         },
         login({ commit, dispatch, state }, authData) {
@@ -66,7 +68,7 @@ const store = new Vuex.Store({
                     "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=";
             }
             axios
-                .post(authLink + "AIzaSyDwu6F0srWIGyPCWI8nz4Wnld7CEhSWJ8A", {
+                .post(authLink + firebaseConfig.apiKey, {
                     email: authData.email,
                     password: authData.password,
                     returnSecureToken: true,
@@ -74,13 +76,15 @@ const store = new Vuex.Store({
                 .then((response) => {
                     commit("setToken", response.data.idToken)
                     localStorage.setItem("token", response.data.idToken);
-                    //localStorage.setItem("expirationDate", new Date().getTime() + response.data.expiresIn * 1000);
-                    localStorage.setItem("expirationDate", new Date().getTime() + 5000);
+                    localStorage.setItem("expirationDate", new Date().getTime() + response.data.expiresIn * 1000);
+                    //localStorage.setItem("expirationDate", new Date().getTime() + 10000);
 
-                    //dispatch("setTimeoutTimer", +response.data.expiresIn * 1000)
-                    dispatch("setTimeoutTimer", 5000)
+                    dispatch("setTimeoutTimer", +response.data.expiresIn * 1000)
+                        //dispatch("setTimeoutTimer", 10000)
 
                     console.log(response.data);
+                }).catch((response) => {
+                    console.log(response);
                 });
 
         },
